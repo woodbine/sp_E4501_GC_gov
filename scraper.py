@@ -66,7 +66,7 @@ def convert_mth_strings ( mth_string ):
 #proxi = {'http': 'http://216.178.226.41:80'}
 html = requests.get(url, headers = header)
 #html = urllib2.urlopen(url)
-soup = BeautifulSoup(html.text)
+soup = BeautifulSoup(html.text, 'lxml')
 
 # find all entries with the required class
 block = soup.find('table', attrs = {'summary':'Data Table'})
