@@ -81,6 +81,8 @@ for link in links:
             if '.csv' in url:
                 csvfiles = dates[0].replace('201306', 'June 2013').replace('201305', 'July 2013').replace('201304', 'August 2013').replace('500', 'November 2013')
                 csvYr = url.split('/')[-1].split('.csv')[0].replace('-year-end-transparency-report---Expenditure-over-250', '').replace('DataReport', '').replace('201306', '2013').replace('201305', '2013').replace('201304', '2013').replace('201408', '2014').replace('November-Data', '2011')[-2:]
+                if 'December-2014' in url:
+                    csvYr = '14'
                 csvYr = '20'+csvYr
                 csvMth = csvfiles[:3]
                 csvMth = convert_mth_strings(csvMth.upper())
