@@ -8,10 +8,11 @@ import scraperwiki
 import urllib2
 from datetime import datetime
 from bs4 import BeautifulSoup
-import requests
 
 
-#### FUNCTIONS 1.0
+
+#### FUNCTIONS 1.2
+import requests     # import requests to validate URL
 
 def validateFilename(filename):
     filenameregex = '^[a-zA-Z0-9]+_[a-zA-Z0-9]+_[a-zA-Z0-9]+_[0-9][0-9][0-9][0-9]_[0-9QY][0-9]$'
@@ -39,19 +40,18 @@ def validateFilename(filename):
 
 def validateURL(url):
     try:
-        r = urllib2.urlopen(url)
+        r = requests.get(url, allow_redirects=True, timeout=20, proxies = proxy, headers = header)
         count = 1
-        while r.getcode() == 500 and count < 4:
+        while r.status_code == 500 and count < 4:
             print ("Attempt {0} - Status code: {1}. Retrying.".format(count, r.status_code))
             count += 1
-            r = urllib2.urlopen(url)
+            r = requests.get(url, allow_redirects=True, timeout=20)
         sourceFilename = r.headers.get('Content-Disposition')
-
         if sourceFilename:
             ext = os.path.splitext(sourceFilename)[1].replace('"', '').replace(';', '').replace(' ', '')
         else:
             ext = os.path.splitext(url)[1]
-        validURL = r.getcode() == 200
+        validURL = r.status_code == 200
         validFiletype = ext in ['.csv', '.xls', '.xlsx']
         return validURL, validFiletype
     except:
@@ -91,12 +91,12 @@ url = "http://www.gateshead.gov.uk/Council and Democracy/finance/500Expenditure.
 errors = 0
 data = []
 header = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',}
+proxy = {'http': '171.33.222.11:8080'}
 
-#### READ HTML 1.1 - no "lxml"
+#### READ HTML 1.2
 
-# html = urllib2.urlopen(url)
-html = requests.get(url, headers = header)
-soup = BeautifulSoup(html, 'lxml')
+html = requests.get(url, proxies = proxy, headers = header)   # using requests with proxy
+soup = BeautifulSoup(html.text, 'lxml')
 
 #### SCRAPE DATA
 
@@ -105,22 +105,21 @@ links = block.find_all('tr')
 for link in links:
     links_csv = link.find_all('td')
     for link_csv in links_csv:
+            dates = ''
             try:
                 url = 'http://www.gateshead.gov.uk' +link_csv.find_next('td').find('a')['href']
-                dates = link_csv.find_next('td').find('a')['title'].split(' ')
             except: pass
             if '.csv' in url:
-                csvfiles = dates[0].replace('201306', 'June 2013').replace('201305', 'July 2013').replace('201304', 'August 2013').replace('500', 'November 2013')
-                csvYr = url.split('/')[-1].split('.csv')[0].replace('-year-end-transparency-report---Expenditure-over-250', '').replace('DataReport', '').replace('201306', '2013').replace('201305', '2013').replace('201304', '2013').replace('201408', '2014').replace('November-Data', '2011')[-2:]
-                if 'December-2014' in url:
-                    csvYr = '14'
-                if '2015' in url:
-                    csvYr = '15'
-                csvYr = '20'+csvYr
-                csvMth = csvfiles[:3]
-                csvMth = convert_mth_strings(csvMth.upper())
-                todays_date = str(datetime.now())
-                data.append([csvYr, csvMth, url])
+                if u'year-end' not in link_csv.find_next('td').find('a')['href']:
+                    dates = link_csv.find_next('td').find('a').find_previous('td').find_previous('td').text.strip()
+                    if u'redacted' not in dates:
+                        if 'Ocober 2014' in dates:
+                            dates = 'October 2014'
+                        csvYr = dates[-4:]
+                        csvMth = dates[:3]
+                        csvMth = convert_mth_strings(csvMth.upper())
+                        todays_date = str(datetime.now())
+                        data.append([csvYr, csvMth, url])
 
 #### STORE DATA 1.0
 
