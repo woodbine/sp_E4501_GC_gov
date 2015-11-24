@@ -91,7 +91,7 @@ url = "http://www.gateshead.gov.uk/Council and Democracy/finance/500Expenditure.
 errors = 0
 data = []
 header = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',}
-proxy = {'http': '171.33.222.11:8080'}
+proxy = {'http': '31.214.240.2:8888'}
 
 #### READ HTML 1.2
 
@@ -110,16 +110,17 @@ for link in links:
                 url = 'http://www.gateshead.gov.uk' +link_csv.find_next('td').find('a')['href']
             except: pass
             if '.csv' in url:
-                if u'year-end' not in link_csv.find_next('td').find('a')['href']:
-                    dates = link_csv.find_next('td').find('a').find_previous('td').find_previous('td').text.strip()
-                    if u'redacted' not in dates:
-                        if 'Ocober 2014' in dates:
-                            dates = 'October 2014'
-                        csvYr = dates[-4:]
-                        csvMth = dates[:3]
-                        csvMth = convert_mth_strings(csvMth.upper())
-                        todays_date = str(datetime.now())
-                        data.append([csvYr, csvMth, url])
+                dates = link_csv.find_next('td').find('a').find_previous('td').find_previous('td').text.strip()
+                if 'Ocober 2014' in dates:
+                    dates = 'October 2014'
+                csvYr = dates[-4:]
+                csvMth = dates[:3]
+                if 'redacte' in dates or 'Year' in dates:
+                    csvYr = dates.split(' ')[1]
+                    csvMth = dates[:3]
+                csvMth = convert_mth_strings(csvMth.upper())
+                todays_date = str(datetime.now())
+                data.append([csvYr, csvMth, url])
 
 #### STORE DATA 1.0
 
