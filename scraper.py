@@ -91,7 +91,7 @@ url = "http://www.gateshead.gov.uk/Council and Democracy/finance/500Expenditure.
 errors = 0
 data = []
 header = {'user-agent': 'Mozilla/5.0',}
-proxy = {'http': 'http://5.10.112.93:80'}
+proxy = {'http': 'http://94.23.157.1:8080'}
 
 #### READ HTML 1.2
 
