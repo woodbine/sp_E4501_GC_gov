@@ -90,8 +90,8 @@ entity_id = "E4501_GC_gov"
 url = "http://www.gateshead.gov.uk/Council and Democracy/finance/500Expenditure.aspx"
 errors = 0
 data = []
-header = {'user-agent': 'Mozilla/5.0',}
-proxy = {'http': 'http://94.23.157.1:8080'}
+header = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',}
+proxy = {'http': 'http://194.75.53.21:80'}
 
 #### READ HTML 1.2
 
@@ -99,9 +99,8 @@ html = requests.get(url, proxies = proxy, headers = header)   # using requests w
 soup = BeautifulSoup(html.text, 'lxml')
 
 #### SCRAPE DATA
-print soup
+
 block = soup.find('table')
-print block
 links = block.find_all('tr')
 for link in links:
     links_csv = link.find_all('td')
