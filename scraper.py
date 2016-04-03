@@ -91,17 +91,17 @@ url = "http://www.gateshead.gov.uk/Council and Democracy/finance/500Expenditure.
 errors = 0
 data = []
 header = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',}
-#proxy = {'http': 'http://5.10.112.93:80'}
+proxy = {'http': 'http://5.10.112.93:80'}
 
 #### READ HTML 1.2
 
-#html = requests.get(url, proxies = proxy, headers = header)   # using requests with proxy
-html = requests.get(url, headers = header)
+html = requests.get(url, proxies = proxy, headers = header)   # using requests with proxy
 soup = BeautifulSoup(html.text, 'lxml')
 
 #### SCRAPE DATA
-
+print soup
 block = soup.find('table')
+print block
 links = block.find_all('tr')
 for link in links:
     links_csv = link.find_all('td')
