@@ -99,7 +99,7 @@ html = requests.get(url, proxies = proxy, headers = header)   # using requests w
 soup = BeautifulSoup(html.text, 'lxml')
 
 #### SCRAPE DATA
-print soup
+
 block = soup.find('table')
 links = block.find_all('tr')
 for link in links:
