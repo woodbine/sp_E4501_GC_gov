@@ -39,6 +39,8 @@ def validateFilename(filename):
 
 
 def validateURL(url):
+    header = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',}
+    proxy = {'http': 'http://194.75.53.21:80'}
     try:
         r = requests.get(url, allow_redirects=True, timeout=20, proxies = proxy, headers = header)
         count = 1
