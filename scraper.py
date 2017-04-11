@@ -40,7 +40,6 @@ def validateFilename(filename):
 
 def validateURL(url):
     try:
-        #r = requests.get(url, allow_redirects=True, timeout=20, proxies = proxy, headers = header)
         r = requests.get(url, allow_redirects=True, timeout=20, headers = header)
         count = 1
         while r.status_code == 500 and count < 4:
@@ -92,11 +91,9 @@ url = "http://www.gateshead.gov.uk/Council%20and%20Democracy/finance/500Expendit
 errors = 0
 data = []
 header = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',}
-#proxy = {'http': 'http://46.16.1.9:8080'}
 
 #### READ HTML 1.2
 
-#html = requests.get(url, proxies = proxy, headers = header)   # using requests with proxy
 html = requests.get(url, headers = header)
 soup = BeautifulSoup(html.text, 'lxml')
 
