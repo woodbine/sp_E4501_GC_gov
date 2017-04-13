@@ -40,7 +40,7 @@ def validateFilename(filename):
 
 def validateURL(url):
     try:
-        r = requests.get(url, allow_redirects=True, timeout=20, proxies = proxy, headers = header)
+        r = requests.get(url, allow_redirects=True, timeout=20, headers = header)
         count = 1
         while r.status_code == 500 and count < 4:
             print ("Attempt {0} - Status code: {1}. Retrying.".format(count, r.status_code))
@@ -87,15 +87,14 @@ def convert_mth_strings ( mth_string ):
 #### VARIABLES 1.0
 
 entity_id = "E4501_GC_gov"
-url = "http://www.gateshead.gov.uk/Council and Democracy/finance/500Expenditure.aspx"
+url = "http://www.gateshead.gov.uk/Council%20and%20Democracy/finance/500Expenditure.aspx"
 errors = 0
 data = []
 header = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:32.0) Gecko/20100101 Firefox/32.0',}
-proxy = {'http': 'http://5.10.112.93:80'}
 
 #### READ HTML 1.2
 
-html = requests.get(url, proxies = proxy, headers = header)   # using requests with proxy
+html = requests.get(url, headers = header)
 soup = BeautifulSoup(html.text, 'lxml')
 
 #### SCRAPE DATA
