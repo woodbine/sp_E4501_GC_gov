@@ -10,6 +10,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 
+
 #### FUNCTIONS 1.2
 import requests     # import requests to validate URL
 
