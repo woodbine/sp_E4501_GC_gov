@@ -140,5 +140,4 @@ for row in data:
 if errors > 0:
     raise Exception("%d errors occurred during scrape." % errors)
 
-
 #### EOF
